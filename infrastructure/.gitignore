@@ -6,6 +6,10 @@ terraform.tfstate.backup
 *.tfplan
 tfplan
 
+# Lambda deployment packages
+lambda/*.zip
+*.zip
+
 # Terraform variable files (contain sensitive data)
 *.tfvars
 !terraform.tfvars.example

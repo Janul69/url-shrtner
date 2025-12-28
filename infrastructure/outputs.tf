@@ -19,3 +19,39 @@ output "dynamodb_table_stream_arn" {
   description = "The ARN of the Table Stream. Only available when stream_enabled = true"
   value       = module.dynamodb.dynamodb_table_stream_arn
 }
+
+# Lambda Outputs
+output "lambda_shorten_function_name" {
+  description = "Name of the shorten Lambda function"
+  value       = module.lambda.lambda_shorten_function_name
+}
+
+output "lambda_shorten_function_arn" {
+  description = "ARN of the shorten Lambda function"
+  value       = module.lambda.lambda_shorten_function_arn
+}
+
+output "lambda_shorten_function_invoke_arn" {
+  description = "Invoke ARN of the shorten Lambda function"
+  value       = module.lambda.lambda_shorten_function_invoke_arn
+}
+
+output "lambda_redirect_function_name" {
+  description = "Name of the redirect Lambda function"
+  value       = module.lambda.lambda_redirect_function_name
+}
+
+output "lambda_redirect_function_arn" {
+  description = "ARN of the redirect Lambda function"
+  value       = module.lambda.lambda_redirect_function_arn
+}
+
+output "lambda_redirect_function_invoke_arn" {
+  description = "Invoke ARN of the redirect Lambda function"
+  value       = module.lambda.lambda_redirect_function_invoke_arn
+}
+
+output "lambda_execution_role_arn" {
+  description = "ARN of the Lambda execution role"
+  value       = module.lambda.lambda_execution_role_arn
+}

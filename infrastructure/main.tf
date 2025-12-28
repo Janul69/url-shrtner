@@ -6,6 +6,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    archive = {
+      source  = "hashicorp/archive"
+      version = "~> 2.4"
+    }
   }
 }
 
@@ -34,4 +38,26 @@ module "dynamodb" {
   write_capacity              = var.dynamodb_write_capacity
   enable_point_in_time_recovery = var.dynamodb_enable_point_in_time_recovery
   enable_encryption           = var.dynamodb_enable_encryption
+}
+
+# Lambda Module
+module "lambda" {
+  source = "./lambda"
+
+  # Pass shared variables
+  environment  = var.environment
+  project_name = var.project_name
+
+  # DynamoDB information (from dynamodb module)
+  dynamodb_table_name = module.dynamodb.dynamodb_table_name
+  dynamodb_table_arn  = module.dynamodb.dynamodb_table_arn
+
+  # Lambda-specific variables
+  shorten_function_source_path = var.lambda_shorten_function_source_path
+  redirect_function_source_path = var.lambda_redirect_function_source_path
+  lambda_runtime               = var.lambda_runtime
+  lambda_timeout               = var.lambda_timeout
+  lambda_memory_size           = var.lambda_memory_size
+  base_url                     = var.lambda_base_url
+  default_redirect_url         = var.lambda_default_redirect_url
 }

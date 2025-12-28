@@ -12,14 +12,19 @@ infrastructure/
 ├── terraform.tfvars.example  # Example variables file
 ├── .gitignore                # Git ignore rules
 ├── README.md                 # This file
-└── dynamodb/                 # DynamoDB service module
-    ├── main.tf               # DynamoDB table resource
-    ├── variables.tf          # DynamoDB-specific variables
-    ├── outputs.tf            # DynamoDB outputs
-    └── README.md             # DynamoDB module documentation
+├── dynamodb/                  # DynamoDB service module
+│   ├── main.tf               # DynamoDB table resource
+│   ├── variables.tf          # DynamoDB-specific variables
+│   ├── outputs.tf            # DynamoDB outputs
+│   └── README.md             # DynamoDB module documentation
+└── lambda/                    # Lambda service module
+    ├── main.tf               # Lambda functions and IAM resources
+    ├── variables.tf          # Lambda-specific variables
+    ├── outputs.tf            # Lambda outputs
+    └── README.md             # Lambda module documentation
 ```
 
-The infrastructure is organized by service (e.g., `dynamodb/`). Each service has its own module with dedicated configuration files. This makes it easy to add new services (e.g., `lambda/`, `api-gateway/`, etc.) in the future.
+The infrastructure is organized by service (e.g., `dynamodb/`, `lambda/`). Each service has its own module with dedicated configuration files. This makes it easy to add new services (e.g., `api-gateway/`, `s3/`, etc.) in the future.
 
 ## Prerequisites
 
@@ -111,12 +116,28 @@ Type `yes` when prompted to create the resources (unless using a saved plan).
   - Billing mode: Pay-per-request (default) or Provisioned
   - Server-side encryption enabled by default
 
+### Lambda Module (`lambda/`)
+
+- **IAM Role**: Execution role for Lambda functions with DynamoDB and CloudWatch Logs permissions
+- **Lambda Function (shorten)**: Creates shortened URLs
+  - Runtime: Node.js 18.x (configurable)
+  - Timeout: 30 seconds (configurable)
+  - Memory: 128 MB (configurable)
+- **Lambda Function (redirect)**: Redirects short codes to original URLs
+  - Runtime: Node.js 18.x (configurable)
+  - Timeout: 30 seconds (configurable)
+  - Memory: 128 MB (configurable)
+
+**IAM Permissions:**
+- DynamoDB: GetItem, PutItem, UpdateItem, Query, Scan
+- CloudWatch Logs: CreateLogGroup, CreateLogStream, PutLogEvents
+
 ## Outputs
 
 After applying, Terraform will output:
-- DynamoDB table name
-- DynamoDB table ARN
-- DynamoDB table ID
+- DynamoDB table name, ARN, and ID
+- Lambda function names, ARNs, and invoke ARNs (for API Gateway integration)
+- Lambda execution role ARN
 
 ## Destroying Resources
 
@@ -144,6 +165,15 @@ Key variables:
 - `dynamodb_enable_point_in_time_recovery`: Enable PITR (default: false)
 - `dynamodb_read_capacity`: Read capacity (if using PROVISIONED mode)
 - `dynamodb_write_capacity`: Write capacity (if using PROVISIONED mode)
+
+**Lambda Variables:**
+- `lambda_shorten_function_source_path`: Path to shorten function (default: ../backend/functions/shorten)
+- `lambda_redirect_function_source_path`: Path to redirect function (default: ../backend/functions/redirect)
+- `lambda_runtime`: Lambda runtime version (default: nodejs18.x)
+- `lambda_timeout`: Function timeout in seconds (default: 30)
+- `lambda_memory_size`: Memory size in MB (default: 128)
+- `lambda_base_url`: Base URL for shortened links (default: https://myapp.com)
+- `lambda_default_redirect_url`: Default redirect URL (default: https://myapp.com)
 
 ## Security Notes
 
