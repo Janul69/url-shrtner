@@ -1,0 +1,25 @@
+# AWS Configuration
+aws_region     = "us-east-1"
+aws_access_key = "your_access_key_here"
+aws_secret_key = "your_secret_key_here"
+
+# Shared Configuration
+environment  = "dev"
+project_name = "url-shortener"
+
+# DynamoDB Configuration
+dynamodb_table_name = "url-shortener"
+dynamodb_billing_mode = "PAY_PER_REQUEST"  # Options: PAY_PER_REQUEST or PROVISIONED
+
+# If using PROVISIONED billing mode, uncomment and set these:
+# dynamodb_read_capacity  = 5
+# dynamodb_write_capacity = 5
+
+# DynamoDB Additional Settings
+dynamodb_enable_point_in_time_recovery = false
+dynamodb_enable_encryption            = true
+
+# Security Note: 
+# - Never commit terraform.tfvars with real credentials to version control
+# - For production, consider using AWS Secrets Manager, Parameter Store, or IAM roles
+
