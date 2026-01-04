@@ -17,11 +17,16 @@ infrastructure/
 │   ├── variables.tf          # DynamoDB-specific variables
 │   ├── outputs.tf            # DynamoDB outputs
 │   └── README.md             # DynamoDB module documentation
-└── lambda/                    # Lambda service module
-    ├── main.tf               # Lambda functions and IAM resources
-    ├── variables.tf          # Lambda-specific variables
-    ├── outputs.tf            # Lambda outputs
-    └── README.md             # Lambda module documentation
+├── lambda/                    # Lambda service module
+│   ├── main.tf               # Lambda functions and IAM resources
+│   ├── variables.tf          # Lambda-specific variables
+│   ├── outputs.tf            # Lambda outputs
+│   └── README.md             # Lambda module documentation
+└── api-gateway/              # API Gateway service module
+    ├── main.tf               # API Gateway REST API and integrations
+    ├── variables.tf          # API Gateway-specific variables
+    ├── outputs.tf            # API Gateway outputs
+    └── README.md             # API Gateway module documentation
 ```
 
 The infrastructure is organized by service (e.g., `dynamodb/`, `lambda/`). Each service has its own module with dedicated configuration files. This makes it easy to add new services (e.g., `api-gateway/`, `s3/`, etc.) in the future.
@@ -132,12 +137,27 @@ Type `yes` when prompted to create the resources (unless using a saved plan).
 - DynamoDB: GetItem, PutItem, UpdateItem, Query, Scan
 - CloudWatch Logs: CreateLogGroup, CreateLogStream, PutLogEvents
 
+### API Gateway Module (`api-gateway/`)
+
+- **API Gateway REST API**: RESTful API for URL shortener service
+- **POST /shorten Endpoint**: Creates shortened URLs
+- **OPTIONS /shorten Endpoint**: CORS preflight handler
+- **Lambda Integration**: Integrated with shorten Lambda function
+- **Deployment & Stage**: Configured with dev stage (configurable)
+
+**Features:**
+- CORS enabled for all origins
+- AWS_PROXY integration with Lambda
+- Automatic deployment on configuration changes
+
 ## Outputs
 
 After applying, Terraform will output:
 - DynamoDB table name, ARN, and ID
 - Lambda function names, ARNs, and invoke ARNs (for API Gateway integration)
 - Lambda execution role ARN
+- API Gateway ID, ARN, and invoke URL
+- API Gateway shorten endpoint URL (ready to use)
 
 ## Destroying Resources
 
@@ -174,6 +194,12 @@ Key variables:
 - `lambda_memory_size`: Memory size in MB (default: 128)
 - `lambda_base_url`: Base URL for shortened links (default: https://myapp.com)
 - `lambda_default_redirect_url`: Default redirect URL (default: https://myapp.com)
+
+**API Gateway Variables:**
+- `api_gateway_name`: Name of the API Gateway (default: url-shortener-api)
+- `api_gateway_description`: Description of the API Gateway
+- `api_gateway_endpoint_type`: REGIONAL, EDGE, or PRIVATE (default: REGIONAL)
+- `api_gateway_stage_name`: Stage name (default: dev)
 
 ## Security Notes
 

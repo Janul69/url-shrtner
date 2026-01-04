@@ -28,6 +28,12 @@ lambda_memory_size                   = 128
 lambda_base_url                      = "https://myapp.com"
 lambda_default_redirect_url          = "https://myapp.com"
 
+# API Gateway Configuration
+api_gateway_name        = "url-shortener-api"
+api_gateway_description = "API Gateway for URL Shortener service"
+api_gateway_endpoint_type = "REGIONAL"  # Options: REGIONAL, EDGE, or PRIVATE
+api_gateway_stage_name   = "dev"
+
 # Security Note: 
 # - Never commit terraform.tfvars with real credentials to version control
 # - For production, consider using AWS Secrets Manager, Parameter Store, or IAM roles

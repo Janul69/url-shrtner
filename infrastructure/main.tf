@@ -61,3 +61,23 @@ module "lambda" {
   base_url                     = var.lambda_base_url
   default_redirect_url         = var.lambda_default_redirect_url
 }
+
+
+# API Gateway Module
+module "api_gateway" {
+  source = "./api-gateway"
+
+  # Pass shared variables
+  environment  = var.environment
+  project_name = var.project_name
+
+  # Lambda information (from lambda module)
+  lambda_shorten_function_name = module.lambda.lambda_shorten_function_name
+  lambda_shorten_invoke_arn    = module.lambda.lambda_shorten_function_invoke_arn
+
+  # API Gateway-specific variables
+  api_name        = var.api_gateway_name
+  api_description = var.api_gateway_description
+  endpoint_type   = var.api_gateway_endpoint_type
+  stage_name      = var.api_gateway_stage_name
+}

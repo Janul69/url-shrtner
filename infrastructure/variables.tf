@@ -116,3 +116,33 @@ variable "lambda_default_redirect_url" {
   type        = string
   default     = "https://myapp.com"
 }
+
+# API Gateway Variables
+variable "api_gateway_name" {
+  description = "Name of the API Gateway"
+  type        = string
+  default     = "url-shortener-api"
+}
+
+variable "api_gateway_description" {
+  description = "Description of the API Gateway"
+  type        = string
+  default     = "API Gateway for URL Shortener service"
+}
+
+variable "api_gateway_endpoint_type" {
+  description = "API Gateway endpoint type (REGIONAL, EDGE, or PRIVATE)"
+  type        = string
+  default     = "REGIONAL"
+
+  validation {
+    condition     = contains(["REGIONAL", "EDGE", "PRIVATE"], var.api_gateway_endpoint_type)
+    error_message = "Endpoint type must be REGIONAL, EDGE, or PRIVATE."
+  }
+}
+
+variable "api_gateway_stage_name" {
+  description = "Name of the API Gateway stage"
+  type        = string
+  default     = "dev"
+}

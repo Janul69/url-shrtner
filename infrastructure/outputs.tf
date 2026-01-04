@@ -55,3 +55,24 @@ output "lambda_execution_role_arn" {
   description = "ARN of the Lambda execution role"
   value       = module.lambda.lambda_execution_role_arn
 }
+
+# API Gateway Outputs
+output "api_gateway_id" {
+  description = "ID of the API Gateway"
+  value       = module.api_gateway.api_gateway_id
+}
+
+output "api_gateway_arn" {
+  description = "ARN of the API Gateway"
+  value       = module.api_gateway.api_gateway_arn
+}
+
+output "api_gateway_invoke_url" {
+  description = "Invoke URL of the API Gateway"
+  value       = module.api_gateway.api_gateway_invoke_url
+}
+
+output "api_gateway_shorten_endpoint" {
+  description = "Full endpoint URL for the shorten endpoint"
+  value       = module.api_gateway.api_gateway_shorten_endpoint
+}
